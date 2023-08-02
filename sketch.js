@@ -1,15 +1,18 @@
-const maze = new Maze(100, 100),
-    fillSpeed = 10,
-    hueChangeRate = 0.0;
-let solution, visualised, initial, hue = 0;
-
-function timestamp() {
-    return new Date().getTime() / 1000;
-}
+let maze,
+    fillSpeed = 2,
+    hueChangeRate = 1,
+    solution,
+    visualised,
+    initial,
+    hue = 0,
+    cellSize = 8;
 
 function setup() {
     createCanvas(innerWidth, innerHeight);
-
+    maze = new Maze(
+        Math.floor(innerWidth / cellSize / 2) * 2,
+        Math.floor(innerHeight / cellSize / 2) * 2
+    );
     init();
 }
 
@@ -18,6 +21,10 @@ function init() {
     maze.generate();
     solution = maze.solve();
     visualised = [];
+}
+
+function timestamp() {
+    return new Date().getTime() / 1000;
 }
 
 function updateHue() {
@@ -29,8 +36,8 @@ function updateHue() {
 }
 
 function draw() {
-    hue = 0;
     let current = timestamp();
+    hue = 0;
 
     background(255);
     maze.draw();
@@ -39,25 +46,27 @@ function draw() {
         let w = width / maze.width;
         let h = height / maze.height;
         let elapsed = current - initial;
-        console.log(elapsed, fillSpeed);
-        let totalVisualised = Math.floor(elapsed * fillSpeed);
+        let nextVisualisedCount = Math.ceil(elapsed * fillSpeed);
 
         // Draw the solution
         for (let i = 0; i < visualised.length; i++) {
             updateHue();
-            rect(visualised[i][1] * w, visualised[i][0] * h, w, h);
+            rect(visualised[i][1] * w, visualised[i][0] * h, w + 1, h + 1);
         }
 
-        for (let i = 0; i < totalVisualised; i++) {
+        for (let i = 0; i < nextVisualisedCount; i++) {
             if (solution.length) {
+                let next = solution.shift();
                 updateHue();
-                rect(solution[0][1] * w, solution[0][0] * h, w, h);
-                visualised.push(solution.shift());
+                rect(next[1] * w, next[0] * h, w + 1, h + 1);
+                if (next) {
+                    visualised.push(next);
+                }
             }
         }
     }
 
-    if (!solution.length) {
+    if (solution.length === visualised.length) {
         init();
     }
 }

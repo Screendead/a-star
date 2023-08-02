@@ -70,12 +70,12 @@ class Maze {
                 } else if (i == this.end[0] && j == this.end[1]) {
                     fill(255, 0, 0); // end is red
                 } else if (this.maze[i][j] === 1) {
-                    fill(0, 0, 0); // wall is black
+                    fill(0); // wall is black
                 } else if (this.maze[i][j] === 0) {
-                    fill(255, 255, 255); // path is white
+                    fill(32); // path is grey
                 }
                 noStroke();
-                rect(j * w, i * h, w, h);
+                rect(j * w, i * h, w + 1, h + 1);
             }
         }
     }
