@@ -5,7 +5,7 @@ let maze,
     visualised,
     initial,
     hue = 0,
-    cellSize = 8;
+    cellSize = 16;
 
 function setup() {
     createCanvas(innerWidth, innerHeight);
@@ -28,11 +28,12 @@ function timestamp() {
 }
 
 function updateHue() {
-    hue += hueChangeRate;
-    hue %= 360;
-    colorMode(HSB);
-    fill(hue, 255, 255);
-    colorMode(RGB);
+    // hue += hueChangeRate;
+    // hue %= 360;
+    // colorMode(HSB);
+    // fill(hue, 255, 255);
+    // colorMode(RGB);
+    fill(0, 255, 0);
 }
 
 function draw() {
@@ -48,6 +49,13 @@ function draw() {
         let elapsed = current - initial;
         let nextVisualisedCount = Math.ceil(elapsed * fillSpeed);
 
+        stroke(255, 255, 255);
+        strokeWeight(cellSize / 4);
+        for (let i = 0; i < solution.length; i++) {
+            point(solution[i][1] * w + w / 2, solution[i][0] * h + h / 2);
+        }
+        noStroke();
+
         // Draw the solution
         for (let i = 0; i < visualised.length; i++) {
             updateHue();
@@ -55,18 +63,18 @@ function draw() {
         }
 
         for (let i = 0; i < nextVisualisedCount; i++) {
-            if (solution.length) {
-                let next = solution.shift();
+            let next = solution[visualised.length];
+            if (next) {
                 updateHue();
-                rect(next[1] * w, next[0] * h, w + 1, h + 1);
                 if (next) {
                     visualised.push(next);
+                    rect(next[1] * w, next[0] * h, w + 1, h + 1);
                 }
             }
         }
     }
 
-    if (solution.length === visualised.length) {
+    if (visualised.length === solution.length) {
         init();
     }
 }
