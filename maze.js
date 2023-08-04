@@ -72,7 +72,7 @@ class Maze {
                 } else if (this.maze[i][j] === 1) {
                     fill(0); // wall is black
                 } else if (this.maze[i][j] === 0) {
-                    fill(32); // path is grey
+                    fill(16); // path is grey
                 }
                 noStroke();
                 rect(j * w, i * h, w + 1, h + 1);
