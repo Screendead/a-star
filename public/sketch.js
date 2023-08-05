@@ -4,10 +4,10 @@ let maze,
     visualised,
     initial,
     hue = 0,
-    cellSize = 4,
+    cellSize = 16,
     timeout
     first = true,
-    cellsToVisualisePerFrame = 10;
+    cellsToVisualisePerFrame = 1;
 
 function setup() {
     createCanvas(innerWidth, innerHeight);
@@ -33,10 +33,10 @@ function timestamp() {
 function updateHue() {
     hue += hueChangeRate;
     hue %= 360;
-    colorMode(HSB);
-    fill(hue, 255, 255);
-    colorMode(RGB);
-    // fill(255, 0, 0);
+    // colorMode(HSB);
+    // fill(hue, 255, 255);
+    // colorMode(RGB);
+    fill(0, 255, 0);
 }
 
 function draw() {
@@ -59,12 +59,12 @@ function draw() {
     }
 
     if (solution.length || visualised.length) {
-        // stroke(255, 255, 255);
-        // strokeWeight(1);
-        // for (let i = 0; i < solution.length; i++) {
-        //     point(solution[i][1] * w + w / 2, solution[i][0] * h + h / 2);
-        // }
-        // noStroke();
+        stroke(255);
+        strokeWeight(4);
+        for (let i = 0; i < solution.length; i++) {
+            point(solution[i][1] * w + w / 2, solution[i][0] * h + h / 2);
+        }
+        noStroke();
 
         for (let i = 0; i < cellsToVisualisePerFrame && visualised.length + i < solution.length; i++) {
             let next = solution[visualised.length];
@@ -86,19 +86,25 @@ function draw() {
         const hud = completion + "% COMPLETED. TIME REMAINING: " + (
             timeRemaining === Infinity
                 ? "∞"
-                : ((minutes < 10 ? "0" : "") + minutes + "m " + (seconds < 10 ? "0" : "") + seconds.toFixed(1) + "s")
+                : ((minutes < 10 ? "0" : "") + minutes + ":" + (seconds < 10 ? "0" : "") + seconds.toFixed(1))
         );
         textSize(32);
         textFont("Helvetica");
         textStyle(BOLD);
         textAlign(RIGHT, TOP);
 
+        // Draw the start and end points
+        fill(255, 0, 0);
+        rect(maze.start[1] * w, maze.start[0] * h, w + 1, h + 1);
+        fill(255, 0, 0);
+        rect(maze.end[1] * w, maze.end[0] * h, w + 1, h + 1);
+
         // Draw the background for the time remaining
-        fill(255);
+        fill(0);
         noStroke();
         rect(width - 4 - textWidth(hud), 0, textWidth(hud) + 4, 40);
 
-        // Draw the time remaining in the bottom right corner
+        // Draw the time remaining in the top right corner
         fill(255, 0, 0);
         text(hud, width, 0);
     }

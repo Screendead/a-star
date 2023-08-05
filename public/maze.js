@@ -39,7 +39,7 @@ class Maze {
      * @returns {void}
      */
     dfs(x, y, depth = 0) {
-        if (depth >= 10000) return; // prevent stack overflow (for large mazes
+        if (depth >= 16384) return; // prevent stack overflow (for large mazes
 
         let dir = this.directions.slice(); // get copy of directions
         this.maze[x][y] = 0;
@@ -98,11 +98,7 @@ class Maze {
         let h = height / this.height;
         for (let i = 0; i < this.height; i++) {
             for (let j = 0; j < this.width; j++) {
-                if (i == this.start[0] && j == this.start[1]) {
-                    fill(0, 255, 0); // start is green
-                } else if (i == this.end[0] && j == this.end[1]) {
-                    fill(255, 0, 0); // end is red
-                } else if (this.maze[i][j] === 1) {
+                if (this.maze[i][j] === 1) {
                     fill(0); // wall is black
                 } else if (this.maze[i][j] === 0) {
                     fill(32); // path is grey
