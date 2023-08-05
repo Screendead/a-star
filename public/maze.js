@@ -53,6 +53,33 @@ class Maze {
                 this.dfs(nx, ny);
             }
         }
+
+        // Introduce some randomness
+        let attemptedStart = [
+                Math.floor(Math.random() * (this.height - 2)) + 1,
+                Math.floor(Math.random() * (this.width - 2)) + 1,
+            ],
+            attemptedEnd = [
+                Math.floor(Math.random() * (this.height - 2)) + 1,
+                Math.floor(Math.random() * (this.width - 2)) + 1,
+            ];
+
+        while (this.maze[attemptedStart[0]][attemptedStart[1]]) {
+            attemptedStart = [
+                Math.floor(Math.random() * (this.height - 2)) + 1,
+                Math.floor(Math.random() * (this.width - 2)) + 1,
+            ];
+        }
+
+        while (this.maze[attemptedEnd[0]][attemptedEnd[1]]) {
+            attemptedEnd = [
+                Math.floor(Math.random() * (this.height - 2)) + 1,
+                Math.floor(Math.random() * (this.width - 2)) + 1,
+            ];
+        }
+
+        this.start = attemptedStart;
+        this.end = attemptedEnd;
     }
 
     /**

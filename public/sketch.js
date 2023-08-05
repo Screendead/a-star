@@ -38,18 +38,22 @@ function updateHue() {
 }
 
 function draw() {
-    const success = visualised.length === solution.length;
-    let current = timestamp();
+    const success = visualised.length === solution.length,
+        percentage = visualised.length / solution.length,
+        completion = Math.floor(percentage * 100),
+        w = width / maze.width,
+        h = height / maze.height,
+        current = timestamp(),
+        elapsed = current - initial;
+        timeRemaining = elapsed * (1 - percentage) / percentage,
+        minutes = Math.floor(timeRemaining / 60),
+        seconds = Math.floor(timeRemaining % 60);
     hue = 0;
 
     background(255);
     maze.draw();
 
     if (solution.length || visualised.length) {
-        let w = width / maze.width;
-        let h = height / maze.height;
-        let elapsed = current - initial;
-
         // stroke(255, 255, 255);
         // strokeWeight(cellSize / 4);
         // for (let i = 0; i < solution.length; i++) {
@@ -72,15 +76,15 @@ function draw() {
             }
         }
 
-        // Draw the completion percentage in the center of the maze
-        let completion = Math.floor((visualised.length / solution.length) * 100);
-        fill(255, 0, 0);
+        // Draw the time remaining in the bottom right corner
         updateHue();
-        textSize(64);
+        stroke(0);
+        strokeWeight(4);
+        textSize(32);
         textFont("Helvetica");
         textStyle(BOLD);
-        textAlign(CENTER, CENTER);
-        text(completion + "%", width / 2, height / 2);
+        textAlign(RIGHT, TOP);
+        text(completion + "% COMPLETED. TIME REMAINING " + minutes + ":" + (seconds < 10 ? "0" : "") + seconds, width - 16, 16);
     }
 
     if (success) {
