@@ -38,7 +38,9 @@ class Maze {
      * @memberof Maze
      * @returns {void}
      */
-    dfs(x, y) {
+    dfs(x, y, depth = 0) {
+        if (depth >= 10000) return; // prevent stack overflow (for large mazes
+
         let dir = this.directions.slice(); // get copy of directions
         this.maze[x][y] = 0;
 
@@ -50,7 +52,11 @@ class Maze {
 
             if (nx > 0 && nx < this.height - 1 && ny > 0 && ny < this.width - 1 && this.maze[nx][ny]) {
                 this.maze[x + direction[0]][y + direction[1]] = 0;
-                this.dfs(nx, ny);
+                try {
+                    this.dfs(nx, ny, depth + 1);
+                } catch (e) {
+                    console.log(e);
+                }
             }
         }
 
@@ -99,7 +105,7 @@ class Maze {
                 } else if (this.maze[i][j] === 1) {
                     fill(0); // wall is black
                 } else if (this.maze[i][j] === 0) {
-                    fill(16); // path is grey
+                    fill(32); // path is grey
                 }
                 noStroke();
                 rect(j * w, i * h, w + 1, h + 1);
